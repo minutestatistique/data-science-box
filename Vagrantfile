@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8888, host: 8888	# jupyter
   config.vm.network "forwarded_port", guest: 6006, host: 6006	# tensorboard
   config.vm.network "forwarded_port", guest: 8787, host: 8787	# rstudio-server
-  
+  config.vm.network "forwarded_port", guest: 5071, host: 5071	# rstudio-shiny
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
