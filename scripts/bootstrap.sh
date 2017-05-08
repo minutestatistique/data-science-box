@@ -20,7 +20,7 @@ MY_EMAIL="minutestatistique160@gmail.com"
 MY_EDITOR="vim"
 
 # PROGS=(R VW libsvm liblinear scala spark sbt kafka python)
-PROGS=(R VW)
+PROGS=(kafka)
 
 PCRE_LNK="https://sourceforge.net/projects/pcre/files/pcre/8.40/pcre-8.40.tar.gz"
 PCRE_ARCH="$(echo "$PCRE_LNK" | rev | cut -d/ -f1 | rev)"
@@ -30,11 +30,11 @@ MPI_LNK="https://www.open-mpi.org/software/ompi/v2.0/downloads/openmpi-2.0.2.tar
 MPI_ARCH="$(echo "$MPI_LNK" | rev | cut -d/ -f1 | rev)"
 MPI=${MPI_ARCH/.tar.gz/""}
 
-R_LNK="https://cran.r-project.org/src/base/R-3/R-3.3.3.tar.gz"
+R_LNK="https://cran.r-project.org/src/base/R-3/R-3.4.0.tar.gz"
 R_ARCH="$(echo "$R_LNK" | rev | cut -d/ -f1 | rev)"
 R=${R_ARCH/.tar.gz/""}
 
-RSTUDIO_LNK="https://download2.rstudio.org/rstudio-server-1.0.136-amd64.deb"
+RSTUDIO_LNK="https://download2.rstudio.org/rstudio-server-1.0.143-amd64.deb"
 RSTUDIO_ARCH="$(echo "$RSTUDIO_LNK" | rev | cut -d/ -f1 | rev)"
 
 VW_LNK="https://github.com/JohnLangford/vowpal_wabbit.git"
@@ -49,20 +49,20 @@ LIBLINEAR_LNK="https://github.com/cjlin1/liblinear.git"
 LIBLINEAR_GIT="$(echo "$LIBLINEAR_LNK" | rev | cut -d/ -f1 | rev)"
 LIBLINEAR=${LIBLINEAR_GIT/.git/""}
 
-SCALA_LNK="http://downloads.lightbend.com/scala/2.12.1/scala-2.12.1.tgz"
+SCALA_LNK="https://downloads.lightbend.com/scala/2.12.2/scala-2.12.2.tgz"
 SCALA_ARCH="$(echo "$SCALA_LNK" | rev | cut -d/ -f1 | rev)"
 SCALA=${SCALA_ARCH/.tgz/""}
 
-SPARK_LNK="http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz"
+SPARK_LNK="http://d3kbcqa49mib13.cloudfront.net/spark-2.1.1-bin-hadoop2.7.tgz"
 SPARK_ARCH="$(echo "$SPARK_LNK" | rev | cut -d/ -f1 | rev)"
 SPARK=${SPARK_ARCH/.tgz/""}
 
-SBT_LNK="https://dl.bintray.com/sbt/native-packages/sbt/0.13.13/sbt-0.13.13.tgz"
+SBT_LNK="https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.tgz"
 SBT_ARCH="$(echo "$SBT_LNK" | rev | cut -d/ -f1 | rev)"
 SBT=${SBT_ARCH/.tgz/""}
 SBT="$(echo "$SBT" | cut -d- -f1)""-launcher-packaging-""$(echo "$SBT" | cut -d- -f2)"
 
-KAFKA_LNK="http://apache.mindstudios.com/kafka/0.10.2.0/kafka_2.12-0.10.2.0.tgz"
+KAFKA_LNK="http://apache.crihan.fr/dist/kafka/0.10.2.1/kafka_2.12-0.10.2.1.tgz"
 KAFKA_ARCH="$(echo "$KAFKA_LNK" | rev | cut -d/ -f1 | rev)"
 KAFKA=${KAFKA_ARCH/.tgz/""}
 
@@ -165,7 +165,7 @@ then
 	# sudo make install
 	# cd ..
 	
-	# install R-3.3.3
+	# install R
 	#-------------------------------------------------------------------------------
 	wget $R_LNK
 	tar -xzf $R_ARCH
@@ -230,7 +230,7 @@ then
 					 dependencies = TRUE, Ncpus = $N_CPUS)
 	EOF
 	chmod u+x R_packages_installer.R
-	./R_packages_installer.R
+	sudo ./R_packages_installer.R
 
 	# install rstudio-server open source
 	#-------------------------------------------------------------------------------
@@ -316,7 +316,7 @@ then
 	wget $SBT_LNK
 	tar -xzf $SBT_ARCH
 	rm -rf $SBT_ARCH
-	ln -s $SBT sbt
+	#ln -s $SBT sbt
 	cat >> $VAGRANT_HOME/.bashrc <<- EOF
 
 	# sbt
