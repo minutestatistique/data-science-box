@@ -43,6 +43,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 6006, host: 6006	# tensorboard
   config.vm.network "forwarded_port", guest: 8787, host: 8787	# rstudio-server
   config.vm.network "forwarded_port", guest: 5071, host: 5071	# rstudio-shiny
+  config.vm.network "forwarded_port", guest: 5432, host: 5432	# psql
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -66,8 +67,8 @@ Vagrant.configure("2") do |config|
     # Display the VirtualBox GUI when booting the machine
 	# vb.gui = true
 	# Customize the amount of memory on the VM:
-	vb.memory = 4096
-	vb.cpus = 3
+	vb.memory = 28000
+	vb.cpus = 6
 	
 	# Add a new disk:
 	# file_to_disk = File.realpath( "." ).to_s + "/disk.vdi"

@@ -14,13 +14,12 @@ containsElement () {
 #-------------------------------------------------------------------------------
 VAGRANT_HOME="/home/vagrant"
 MY_HOME="$VAGRANT_HOME/data-science"
-N_CPUS=3
+N_CPUS=6
 MY_NAME="minutestatistique"
-MY_EMAIL="minutestatistique160@gmail.com"
+MY_EMAIL="data.science.fr@gmail.com"
 MY_EDITOR="vim"
 
-# PROGS=(R VW libsvm liblinear scala spark sbt kafka python)
-PROGS=(kafka)
+PROGS=(R VW libsvm liblinear scala spark sbt kafka python psql)
 
 PCRE_LNK="https://sourceforge.net/projects/pcre/files/pcre/8.40/pcre-8.40.tar.gz"
 PCRE_ARCH="$(echo "$PCRE_LNK" | rev | cut -d/ -f1 | rev)"
@@ -30,11 +29,11 @@ MPI_LNK="https://www.open-mpi.org/software/ompi/v2.0/downloads/openmpi-2.0.2.tar
 MPI_ARCH="$(echo "$MPI_LNK" | rev | cut -d/ -f1 | rev)"
 MPI=${MPI_ARCH/.tar.gz/""}
 
-R_LNK="https://cran.r-project.org/src/base/R-3/R-3.4.0.tar.gz"
+R_LNK="https://cran.r-project.org/src/base/R-3/R-3.4.1.tar.gz"
 R_ARCH="$(echo "$R_LNK" | rev | cut -d/ -f1 | rev)"
 R=${R_ARCH/.tar.gz/""}
 
-RSTUDIO_LNK="https://download2.rstudio.org/rstudio-server-1.0.143-amd64.deb"
+RSTUDIO_LNK="https://download2.rstudio.org/rstudio-server-1.0.153-amd64.deb"
 RSTUDIO_ARCH="$(echo "$RSTUDIO_LNK" | rev | cut -d/ -f1 | rev)"
 
 VW_LNK="https://github.com/JohnLangford/vowpal_wabbit.git"
@@ -49,20 +48,20 @@ LIBLINEAR_LNK="https://github.com/cjlin1/liblinear.git"
 LIBLINEAR_GIT="$(echo "$LIBLINEAR_LNK" | rev | cut -d/ -f1 | rev)"
 LIBLINEAR=${LIBLINEAR_GIT/.git/""}
 
-SCALA_LNK="https://downloads.lightbend.com/scala/2.12.2/scala-2.12.2.tgz"
+SCALA_LNK="https://downloads.lightbend.com/scala/2.12.3/scala-2.12.3.tgz"
 SCALA_ARCH="$(echo "$SCALA_LNK" | rev | cut -d/ -f1 | rev)"
 SCALA=${SCALA_ARCH/.tgz/""}
 
-SPARK_LNK="http://d3kbcqa49mib13.cloudfront.net/spark-2.1.1-bin-hadoop2.7.tgz"
+SPARK_LNK="https://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz"
 SPARK_ARCH="$(echo "$SPARK_LNK" | rev | cut -d/ -f1 | rev)"
 SPARK=${SPARK_ARCH/.tgz/""}
 
-SBT_LNK="https://github.com/sbt/sbt/releases/download/v0.13.15/sbt-0.13.15.tgz"
+SBT_LNK="https://cocl.us/sbt-1.0.1.tgz"
 SBT_ARCH="$(echo "$SBT_LNK" | rev | cut -d/ -f1 | rev)"
 SBT=${SBT_ARCH/.tgz/""}
 SBT="$(echo "$SBT" | cut -d- -f1)""-launcher-packaging-""$(echo "$SBT" | cut -d- -f2)"
 
-KAFKA_LNK="http://apache.crihan.fr/dist/kafka/0.10.2.1/kafka_2.12-0.10.2.1.tgz"
+KAFKA_LNK="http://apache.crihan.fr/dist/kafka/0.11.0.0/kafka-0.11.0.0-src.tgz"
 KAFKA_ARCH="$(echo "$KAFKA_LNK" | rev | cut -d/ -f1 | rev)"
 KAFKA=${KAFKA_ARCH/.tgz/""}
 
@@ -82,18 +81,25 @@ sudo apt-get install -y byobu vim htop git build-essential
 
 # install dev packages
 #-------------------------------------------------------------------------------
+if containsElement "psql" "${PROGS[@]}"
+then
+	echo "preparing to install psql and associated tools..."
+	sudo apt-get install -y postgresql postgresql-contrib
+	#sudo -i -u postgres
+fi
+
 if containsElement "R" "${PROGS[@]}"
 then
 	echo "preparing to install R and associated tools..."
 	# R
-	sudo apt-get install -y gfortran libreadline-dev xorg-dev \
+	sudo apt-get install -y default-jdk gfortran libreadline-dev xorg-dev \
 		libbz2-dev liblzma-dev libpcre3-dev libcurl4-openssl-dev libjpeg-dev \
 		libtiff5-dev libcairo2-dev libicu-dev gobjc++ texlive texinfo \
 		texlive-fonts-extra
 	# RStudio Server Open Source
 	sudo apt-get install -y gdebi-core
 	# R packages
-	sudo apt-get install -y default-jdk libopenmpi-dev libgmp3-dev libmpfr-dev \
+	sudo apt-get install -y libopenmpi-dev libgmp3-dev libmpfr-dev \
 		libmpfr-doc libmpfr4 libmpfr4-dbg tcl8.6 tk8.6 tcl8.6-dev tk8.6-dev \
 		tcl8.6-doc tk8.6-doc postgresql libpq-dev unixodbc unixodbc-dev \
 		libmagick++-dev libpoppler-cpp-dev libpoppler-glib-dev libwebp-dev \
@@ -285,10 +291,9 @@ then
 
 	# sbt
 	export SCALA_HOME="$MY_HOME/src/scala"
-	export PATH=$PATH:$SCALA_HOME/bin
+	export PATH=\$PATH:\$SCALA_HOME/bin
 
 	EOF
-	source $VAGRANT_HOME/.bashrc
 fi
 
 # install spark
@@ -303,10 +308,9 @@ then
 
 	# spark
 	export SPARK_HOME="$MY_HOME/src/spark"
-	export PATH=$PATH:$SPARK_HOME/bin
+	export PATH=\$PATH:\$SPARK_HOME/bin
 
 	EOF
-	source $VAGRANT_HOME/.bashrc
 fi
 
 # install sbt
@@ -321,10 +325,9 @@ then
 
 	# sbt
 	export SBT_HOME="$MY_HOME/src/sbt"
-	export PATH=$PATH:$SBT_HOME/bin
+	export PATH=\$PATH:\$SBT_HOME/bin
 
 	EOF
-	source $VAGRANT_HOME/.bashrc
 fi
 
 # install kafka
@@ -337,12 +340,11 @@ then
 	ln -s  $KAFKA kafka
 	cat >> $VAGRANT_HOME/.bashrc <<- EOF
 
-	# sbt
+	# kafka
 	export KAFKA_HOME="$MY_HOME/src/kafka"
-	export PATH=$PATH:$KAFKA_HOME/bin
+	export PATH=\$PATH:\$KAFKA_HOME/bin
 
 	EOF
-	source $VAGRANT_HOME/.bashrc
 fi
 
 # use byobu by default
@@ -360,6 +362,8 @@ cat >> $VAGRANT_HOME/.vimrc <<- EOF
 
 set nu hls
 colorscheme koehler
+set encoding=utf8
+set fileencoding=utf8
 
 EOF
 
@@ -406,3 +410,18 @@ then
 	#-------------------------------------------------------------------------------
 	git clone https://github.com/minutestatistique/scikit-learn-examples.git
 fi
+
+# install java 8 for spark
+if containsElement "spark" "${PROGS[@]}"
+then
+	echo "installing java 8 for spark and associated tools..."
+	sudo apt-get install -y software-properties-common python-software-properties
+	sudo add-apt-repository -y ppa:openjdk-r/ppa
+	sudo apt-get update
+	sudo apt-get install -y openjdk-8-jre
+	#sudo update-alternatives --config java
+fi
+
+# source .bashrc
+#-------------------------------------------------------------------------------
+source $VAGRANT_HOME/.bashrc
