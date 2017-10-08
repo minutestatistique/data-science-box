@@ -1,4 +1,4 @@
-echo "Boostrapping..."
+echo "Bootstrapping..."
 
 # functions definition
 #-------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ if containsElement "VW" "${PROGS[@]}"
 then
 	# vowpal wabbit
 	sudo apt-get install -y libboost-program-options-dev zlib1g-dev \
-		libboost-python-dev
+		libboost-python-dev libboost1.48-all-dev
 fi
 
 if containsElement "python" "${PROGS[@]}"
@@ -364,6 +364,7 @@ set nu hls
 colorscheme koehler
 set encoding=utf8
 set fileencoding=utf8
+set tabstop=2
 
 EOF
 
