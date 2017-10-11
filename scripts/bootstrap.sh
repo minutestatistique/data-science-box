@@ -19,7 +19,8 @@ MY_NAME="minutestatistique"
 MY_EMAIL="data.science.fr@gmail.com"
 MY_EDITOR="vim"
 
-PROGS=(R VW libsvm liblinear scala spark sbt kafka python psql)
+#PROGS=(R VW libsvm liblinear scala spark sbt kafka python psql)
+PROGS=(R VW libsvm liblinear python psql)
 
 PCRE_LNK="https://sourceforge.net/projects/pcre/files/pcre/8.40/pcre-8.40.tar.gz"
 PCRE_ARCH="$(echo "$PCRE_LNK" | rev | cut -d/ -f1 | rev)"
@@ -109,8 +110,9 @@ fi
 if containsElement "VW" "${PROGS[@]}"
 then
 	# vowpal wabbit
-	sudo apt-get install -y libboost-program-options-dev zlib1g-dev \
-		libboost-python-dev libboost1.48-all-dev
+	#sudo apt-get install -y libboost-program-options-dev zlib1g-dev \
+	#	libboost-python-dev
+	sudo apt-get install -y vowpal-wabbit
 fi
 
 if containsElement "python" "${PROGS[@]}"
@@ -248,16 +250,16 @@ fi
 
 # install vowpal wabbit
 #-------------------------------------------------------------------------------
-if containsElement "VW" "${PROGS[@]}"
-then
-	git clone $VW_LNK
-	cd $VW
-	make -j$N_CPUS
-	make test
-	sudo make install
-	cd ..
-	rm -rf $VW
-fi
+#if containsElement "VW" "${PROGS[@]}"
+#then
+	#git clone $VW_LNK
+	#cd $VW
+	#make -j$N_CPUS
+	#make test
+	#sudo make install
+	#cd ..
+	#rm -rf $VW
+#fi
 
 # install libsvm
 #-------------------------------------------------------------------------------
